@@ -1,4 +1,4 @@
-﻿using Sibir.BL.ViewModels;
+﻿using Sibir.Domain.Shared.ViewModels;
 
 namespace Sibir.API.Contracts.Project.Create
 {

@@ -1,21 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Model = Sibir.Domain.Models.EntityObject;
 using Sibir.Domain.Models.ValueObject.ForProject;
-using Name = Sibir.Domain.Models.ValueObject.ForEmployee.Name;
-using Microsoft.EntityFrameworkCore.Internal;
 using CSharpFunctionalExtensions;
 using Sibir.DAL.Repositories.Shared;
-using System.ComponentModel;
 using Sibir.Domain.Models.EntityObject;
 using static Sibir.DAL.Repositories.Shared.EfExtensions;
 using System.Linq.Expressions;
+using Sibir.Domain.Abstraction;
+using Sibir.Domain.Shared;
+using System.Linq;
 
 
 namespace Sibir.DAL.Repositories
 {
-    public class ProjectRepository(SqlServerContext context)
+    public class ProjectRepository(SqlServerContext context) : IProjectRepository
     {
-        private readonly int PAGE_SIZE=20;
+        private readonly int PAGE_SIZE = 20;
 
         private readonly SqlServerContext _context = context;
 
@@ -26,7 +26,7 @@ namespace Sibir.DAL.Repositories
             return project.Id;
         }
 
-        public async Task<(Model.Project,Guid,string,int)[]> GetAll(int page)
+        public async Task<(Model.Project, Guid, string, int)[]> GetAll(int page)
         {
             return (await _context.Projects
                 .QueryGetProject(_context.Employees)
@@ -39,13 +39,13 @@ namespace Sibir.DAL.Repositories
                     p.ManagerMiddleName,
                     TotalCount = _context.Employees.Count()
                 })
-                .Skip(page*PAGE_SIZE)
+                .Skip(page * PAGE_SIZE)
                 .Take(PAGE_SIZE)
                 .ToArrayAsync())
                 .AsEnumerable()
                 .Select(r => (r.Project,
                     r.ManagerId,
-                    string.Concat(r.ManagerFirstName," ",r.ManagerSecondName," ",r.ManagerMiddleName),
+                    string.Concat(r.ManagerFirstName, " ", r.ManagerSecondName, " ", r.ManagerMiddleName),
                     (r.TotalCount + PAGE_SIZE - 1) / PAGE_SIZE))
                 .ToArray();
         }
@@ -58,7 +58,7 @@ namespace Sibir.DAL.Repositories
                     .Where(p => p.Id == projectId)
                     .ExecuteUpdateAsync(p => p.SetProperty(pp => pp.ManagerId, managerId));
             }
-            catch 
+            catch
             {
                 return Maybe.None;
             }
@@ -82,7 +82,7 @@ namespace Sibir.DAL.Repositories
             else
                 return Maybe.None;
         }
-        
+
         public async Task<Maybe<int>> UpdateExecuter(Guid projectId, Guid[] employeesRemoveId, Guid[] employeesAddId)
         {
             int CountRow = 0;
@@ -95,10 +95,10 @@ namespace Sibir.DAL.Repositories
 
             Project.Executers
                     .ToList()
-                    .RemoveAll(e=>employeesRemoveId.Contains(e.Id));
+                    .RemoveAll(e => employeesRemoveId.Contains(e.Id));
 
             var EmployeesAdd = await _context.Employees
-                .Where(e=>employeesAddId.Contains(e.Id))
+                .Where(e => employeesAddId.Contains(e.Id))
                 .ToArrayAsync();
             Project.Executers.ToList().AddRange(EmployeesAdd);
 
@@ -110,36 +110,36 @@ namespace Sibir.DAL.Repositories
         {
             return await _context.Projects
                 .Where(p => p.Id == projactId)
-                .ExecuteUpdateAsync(setter=>setter.SetProperty(p=>p.Priority,newPriority));
+                .ExecuteUpdateAsync(setter => setter.SetProperty(p => p.Priority, newPriority));
         }
 
         public async Task<int> UpdateProjectData(Guid projectId,
-            Title title, 
-            Company company, 
+            Title title,
+            Company company,
             DevelopmentTime developmentTime)
         {
             return await _context.Projects
                 .Where(p => p.Id == projectId)
-                .ExecuteUpdateAsync(setter=> setter
+                .ExecuteUpdateAsync(setter => setter
                     .SetProperty(p => p.Title, title)
                     .SetProperty(p => p.Company, company)
                     .SetProperty(p => p.DevelopmentTime, developmentTime)
                 );
         }
 
-        public async Task<(Model.Project, Guid, string, int)[]> GetFilteredProjects(int page, 
+        public async Task<(Model.Project, Guid, string, int)[]> GetFilteredProjects(int page,
             Action<FilterOptions> optionsAction)
         {
             var Options = new FilterOptions();
             optionsAction(Options);
 
             #region assembly conditions
-            Expression<Func<Project,bool>> Conditions = project => true;
+            Expression<Func<Project, bool>> Conditions = project => true;
             if (!string.IsNullOrEmpty(Options.TitlePart))
                 Conditions = Conditions.AndAlso(project => project.Title.Value.ToLower().
                     Contains(Options.TitlePart.Trim().ToLower()));
 
-            if (!string.IsNullOrEmpty(Options.CompanyConsumerPart  ))
+            if (!string.IsNullOrEmpty(Options.CompanyConsumerPart))
                 Conditions = Conditions.AndAlso(project => project.Company.Consumer.ToLower()
                     .Contains(Options.CompanyConsumerPart.Trim().ToLower()));
 
@@ -148,7 +148,7 @@ namespace Sibir.DAL.Repositories
                     .Contains(Options.CompanyExecuterPart.Trim().ToLower()));
 
             if (Options.BeginingOfTimeRange != null)
-                Conditions = Conditions.AndAlso(project =>  project.DevelopmentTime
+                Conditions = Conditions.AndAlso(project => project.DevelopmentTime
                     .StartDate >= Options.BeginingOfTimeRange);
 
             if (Options.EndOfTimeRange != null)
@@ -158,11 +158,12 @@ namespace Sibir.DAL.Repositories
 
             var BeginQuery = _context.Projects
                 .Where(Conditions)
-                .QueryGetProject(_context.Employees)
+                .QueryGetProjectWithPageCount(_context.Employees,() =>
+                     _context.Projects.Where(Conditions).Count())
                 .Skip(page * PAGE_SIZE)
                 .Take(PAGE_SIZE);
 
-            IQueryable<ProjectManagerDto> MiddleQuery;
+            IQueryable<ProjectManagerDtoWithPageCount> MiddleQuery;
 
             switch (Options.SubjectOfSorting)
             {
@@ -170,7 +171,7 @@ namespace Sibir.DAL.Repositories
                 case SubjectOfSorting.None:
                     if (Options.SortDirection)
                     {
-                        MiddleQuery = BeginQuery.OrderBy(p=>p.Project.Id);
+                        MiddleQuery = BeginQuery.OrderBy(p => p.Project.Id);
                     }
                     else
                     {
@@ -247,23 +248,14 @@ namespace Sibir.DAL.Repositories
                     break;
 
                 default:
-                    MiddleQuery=BeginQuery;
+                    MiddleQuery = BeginQuery;
                     break;
             }
 
             return (await MiddleQuery
-                .Select(p => new
-                {
-                    p.Project,
-                    p.ManagerId,
-                    p.ManagerFirstName,
-                    p.ManagerSecondName,
-                    p.ManagerMiddleName,
-                    TotalCount = _context.Employees.Count()
-                })
                 .ToArrayAsync())
                 .AsEnumerable()
-                .Select(p => 
+                .Select(p =>
                 (
                     p.Project,
                     p.ManagerId,

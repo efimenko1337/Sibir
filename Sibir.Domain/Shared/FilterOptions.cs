@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sibir.DAL.Repositories.Shared
+namespace Sibir.Domain.Shared
 {
     public class FilterOptions()
     {

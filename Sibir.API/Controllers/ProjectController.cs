@@ -6,15 +6,16 @@ using System.Diagnostics.Contracts;
 using PContracts=Sibir.API.Contracts.Project;
 using Sibir.API.Validators;
 using CSharpFunctionalExtensions;
+using Sibir.Domain.Abstraction;
 
 
 namespace Sibir.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjectController(CRUDProjectService crudProjectService) : ControllerBase
+    public class ProjectController(ICRUDProjectService crudProjectService) : ControllerBase
     {
-        readonly CRUDProjectService _crudProjectSevice=crudProjectService;
+        readonly ICRUDProjectService _crudProjectSevice=crudProjectService;
 
         [HttpPost("Create")]
         public async Task<IActionResult> Create([FromBody] PContracts.Create.Request request)
@@ -106,7 +107,7 @@ namespace Sibir.API.Controllers
         }
 
         [HttpPost("GetFilteredProjects")]
-        public async Task<IActionResult> GetFilteredProjects(PContracts.GetFilteredProjects.Request request)
+        public async Task<IActionResult> GetFilteredProjects([FromBody]PContracts.GetFilteredProjects.Request request)
         {
             if (request.Page < 0)
                 return BadRequest("Page number cant be less than zero");

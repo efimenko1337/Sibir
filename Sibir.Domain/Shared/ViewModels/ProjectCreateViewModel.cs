@@ -1,4 +1,4 @@
-﻿namespace Sibir.BL.ViewModels
+﻿namespace Sibir.Domain.Shared.ViewModels
 {
     public record ProjectCreateViewModel
     (

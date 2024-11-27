@@ -2,12 +2,13 @@ using Microsoft.OpenApi.Models;
 using Sibir.BL.Services;
 using Sibir.DAL;
 using Sibir.DAL.Repositories;
+using Sibir.Domain.Abstraction;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<SqlServerContext>();
-builder.Services.AddScoped<ProjectRepository>();
-builder.Services.AddScoped<CRUDProjectService>();
+builder.Services.AddScoped<IProjectRepository,ProjectRepository>();
+builder.Services.AddScoped<ICRUDProjectService,CRUDProjectService>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Sibers", Version = "v1" });

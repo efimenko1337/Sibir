@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sibir.BL.ViewModels
+namespace Sibir.Domain.Shared.ViewModels
 {
     public record DevelopmentTimeViewModel
     (
-        string DateOfStart,    
-        string DateOfFinish    
+        string DateOfStart,
+        string DateOfFinish
     );
 }

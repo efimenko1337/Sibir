@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Sibir.Domain\Sibir.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Contracts\Task\" />
+  </ItemGroup>
+
 </Project>

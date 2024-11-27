@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
-using Sibir.BL.ViewModels;
 using Sibir.Domain.Models.ValueObject.ForProject;
 using Sibir.Domain.Shared;
+using Sibir.Domain.Shared.ViewModels;
 
 namespace Sibir.BL.Mappers
 {
