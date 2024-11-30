@@ -25,7 +25,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\Task\" />
+    <Folder Include="Contracts\Task\Create\" />
+    <Folder Include="Contracts\Task\UpdatePriority\" />
+    <Folder Include="Contracts\Task\Delete\" />
+    <Folder Include="Contracts\Task\UpdateStatus\" />
+    <Folder Include="Contracts\Task\UpdateExecuter\" />
+    <Folder Include="Contracts\Task\GetTaskPerformedByEmployee\" />
+    <Folder Include="Contracts\Task\GetProjectTasks\" />
+    <Folder Include="Contracts\Task\GetById\" />
+    <Folder Include="Contracts\Task\GetFilteredTasksCreatedByEmployee\" />
+    <Folder Include="Contracts\Task\GetProjectsFilteredTasks\" />
+    <Folder Include="Contracts\Task\GetTasksCreatedByEmployee\" />
+    <Folder Include="Contracts\Task\UpdateComments\" />
+    <Folder Include="Contracts\Task\GetFilteredTasksPerformedByEmployee\" />
   </ItemGroup>
 
 </Project>
