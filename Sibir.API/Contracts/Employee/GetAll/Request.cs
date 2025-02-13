@@ -1,6 +1,7 @@
 ﻿namespace Sibir.API.Contracts.Employee.GetAll
 {
-    public class Request
-    {
-    }
+    public record Request
+    (
+        int Page
+    );
 }

@@ -1,4 +1,5 @@
-﻿using Sibir.Domain.Shared;
+﻿using Sibir.Domain.Models.ValueObject.ForEmployee;
+using Sibir.Domain.Shared;
 using Model = Sibir.Domain.Models.EntityObject;
 
 namespace Sibir.DAL.Repositories.Shared
@@ -38,13 +39,19 @@ namespace Sibir.DAL.Repositories.Shared
                 {
                     Task = x.Task,
                     CreatorId = x.Creator != null ? x.Creator.Id : Guid.Empty,
-                    CreatorFirstName = x.Creator != null ? x.Creator.Name.FirstName : string.Empty,
-                    CreatorMiddleName = x.Creator != null ? x.Creator.Name.MiddleName : string.Empty,
-                    CreatorSecondName = x.Creator != null ? x.Creator.Name.SecondName : string.Empty,
+                    CreatorName = Name.Create
+                    (
+                        x.Creator != null ? x.Creator.Name.FirstName : string.Empty,
+                        x.Creator != null ? x.Creator.Name.MiddleName : string.Empty,
+                        x.Creator != null ? x.Creator.Name.SecondName : string.Empty
+                    ).Value,
                     ExecuterId = x.Executer != null ? x.Executer.Id : Guid.Empty,
-                    ExecuterFirstName = x.Executer != null ? x.Executer.Name.FirstName : string.Empty,
-                    ExecuterMiddleName = x.Executer != null ? x.Executer.Name.MiddleName : string.Empty,
-                    ExecuterSecondName = x.Executer != null ? x.Executer.Name.SecondName : string.Empty,
+                    ExecuterName = Name.Create
+                    (
+                        x.Executer != null ? x.Executer.Name.FirstName : string.Empty,
+                        x.Executer != null ? x.Executer.Name.MiddleName : string.Empty,
+                        x.Executer != null ? x.Executer.Name.SecondName : string.Empty
+                    ).Value,
                     ProjectId = x.Project != null ? x.Project.Id : Guid.Empty,
                     ProjectTitle = x.Project != null ? x.Project.Title.Value : string.Empty
                 });
@@ -84,13 +91,19 @@ namespace Sibir.DAL.Repositories.Shared
                 {
                     Task = x.Task,
                     CreatorId = x.Creator != null ? x.Creator.Id : Guid.Empty,
-                    CreatorFirstName = x.Creator != null ? x.Creator.Name.FirstName : string.Empty,
-                    CreatorMiddleName = x.Creator != null ? x.Creator.Name.MiddleName : string.Empty,
-                    CreatorSecondName = x.Creator != null ? x.Creator.Name.SecondName : string.Empty,
+                    CreatorName = Name.Create
+                    (
+                        x.Creator != null ? x.Creator.Name.FirstName : string.Empty,
+                        x.Creator != null ? x.Creator.Name.MiddleName : string.Empty,
+                        x.Creator != null ? x.Creator.Name.SecondName : string.Empty
+                    ).Value,
                     ExecuterId = x.Executer != null ? x.Executer.Id : Guid.Empty,
-                    ExecuterFirstName = x.Executer != null ? x.Executer.Name.FirstName : string.Empty,
-                    ExecuterMiddleName = x.Executer != null ? x.Executer.Name.MiddleName : string.Empty,
-                    ExecuterSecondName = x.Executer != null ? x.Executer.Name.SecondName : string.Empty,
+                    ExecuterName = Name.Create
+                    (
+                        x.Executer != null ? x.Executer.Name.FirstName : string.Empty,
+                        x.Executer != null ? x.Executer.Name.MiddleName : string.Empty,
+                        x.Executer != null ? x.Executer.Name.SecondName : string.Empty
+                    ).Value,
                     ProjectId = x.Project != null ? x.Project.Id : Guid.Empty,
                     ProjectTitle = x.Project != null ? x.Project.Title.Value : string.Empty,
                     TotalCount = CountQuery()

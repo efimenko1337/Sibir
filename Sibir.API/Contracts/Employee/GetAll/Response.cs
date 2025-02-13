@@ -1,6 +1,10 @@
-﻿namespace Sibir.API.Contracts.Employee.GetAll
+﻿using Sibir.Domain.Shared.ViewModels;
+
+namespace Sibir.API.Contracts.Employee.GetAll
 {
-    public class Response
-    {
-    }
+    public record Response
+    (
+        EmployeeViewViewModel[] Employees,
+        int PageCount
+    );
 }

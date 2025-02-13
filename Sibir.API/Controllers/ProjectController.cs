@@ -39,8 +39,6 @@ namespace Sibir.API.Controllers
             return Ok(new PContracts.EditManager.Response(Result.Value));
         }
 
-
-
         [HttpGet("GetAllProject")]
         public async Task<IActionResult> GetAllProject([FromQuery] PContracts.GetAllProject.Request Page) 
         {

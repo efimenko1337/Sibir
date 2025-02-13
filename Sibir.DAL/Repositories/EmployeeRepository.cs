@@ -116,7 +116,7 @@ namespace Sibir.DAL.Repositories
 
             if (Role != string.Empty)
                 predicate = predicate.AndAlso(e =>
-                    e.Role.Value.Contains(Role));
+                    e.Role.Value.Contains(Role)); 
 
             return (await _context.Employees
                 .Where(predicate)
@@ -125,6 +125,8 @@ namespace Sibir.DAL.Repositories
                     Employee = e,
                     TotalCount = _context.Employees.Where(predicate).Count()
                 })
+                .Skip(PAGE_SIZE*Page)
+                .Take(PAGE_SIZE)
                 .ToArrayAsync())
                 .AsEnumerable()
                 .Select(res =>

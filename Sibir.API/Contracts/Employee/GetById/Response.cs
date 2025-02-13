@@ -1,6 +1,9 @@
-﻿namespace Sibir.API.Contracts.Employee.GetById
+﻿using Sibir.Domain.Shared.ViewModels;
+
+namespace Sibir.API.Contracts.Employee.GetById
 {
-    public class Response
-    {
-    }
+    public record Response
+    (
+        EmployeeViewViewModel Employee
+    );
 }

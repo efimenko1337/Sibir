@@ -1,6 +1,10 @@
-﻿namespace Sibir.API.Contracts.Employee.EditRole
+﻿using Sibir.Domain.Shared.ViewModels;
+
+namespace Sibir.API.Contracts.Employee.EditRole
 {
-    public class Request
-    {
-    }
+    public record Request
+    (
+        Guid Id,
+        RoleViewModel Role
+    );
 }

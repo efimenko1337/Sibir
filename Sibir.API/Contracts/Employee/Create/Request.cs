@@ -4,7 +4,6 @@ namespace Sibir.API.Contracts.Employee.Create
 {
     public record Request
     (
-        EmployeeNameViewModel Name,
-        string Role
+        EmployeeCreateViewModel Employee
     );
 }

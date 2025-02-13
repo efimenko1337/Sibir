@@ -15,10 +15,18 @@ namespace Sibir.DAL.Repositories
 
         private readonly int PAGE_SIZE = 20;
 
-        public async Task<Guid> Create(Model.Task newTask)
+        public async Task<Maybe<Guid>> Create(Model.Task newTask)
         {
-            await _context.Tasks.AddAsync(newTask);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.Tasks.AddAsync(newTask);
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                return Maybe.None;
+            }
+
             return newTask.Id;
         }
 

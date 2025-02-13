@@ -6,7 +6,7 @@ namespace Sibir.Domain.Abstraction
 {
     public interface ITaskRepository
     {
-        Task<Guid> Create(Models.EntityObject.Task newTask);
+        Task<Maybe<Guid>> Create(Models.EntityObject.Task newTask);
         Task<Maybe<Guid>> Delete(Guid taskId);
         Task<Maybe<TaskDetailsDto>> GetById(Guid taskId);
         Task<TaskDetailsDtoWithPageCount[]> GetFilteredProjectTasks(Guid projectId, int Page, Action<FilterOptions> optionsAction);

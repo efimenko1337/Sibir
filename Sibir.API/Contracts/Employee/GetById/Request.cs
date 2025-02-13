@@ -1,6 +1,7 @@
 ﻿namespace Sibir.API.Contracts.Employee.GetById
 {
-    public class Request
-    {
-    }
+    public record Request
+    (
+        Guid Id
+    );
 }

@@ -1,6 +1,11 @@
-﻿namespace Sibir.API.Contracts.Employee.GetFilteredEmployees
+﻿using Sibir.Domain.Shared.ViewModels;
+
+namespace Sibir.API.Contracts.Employee.GetFilteredEmployees
 {
-    public class Request
-    {
-    }
+    public record Request
+    (
+        int Page,
+        EmployeeNameViewModel Name,
+        RoleViewModel Role
+    );
 }

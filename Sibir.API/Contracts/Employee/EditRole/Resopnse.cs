@@ -1,6 +1,7 @@
 ﻿namespace Sibir.API.Contracts.Employee.EditRole
 {
-    public class Resopnse
-    {
-    }
+    public record Resopnse
+    (
+        Guid Id
+    );
 }
